@@ -1,0 +1,9 @@
+{
+  "projects": {
+    "default": "react-cursos-ca49f",
+    "boda-app": "react-cursos-ca49f",
+    "miboda-site": "react-cursos-ca49f"
+  },
+  "targets": {},
+  "etags": {}
+}
