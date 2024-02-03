@@ -61,7 +61,7 @@ const PublicGuestPage = () => {
       <CssBaseline />
       <AppBar
         position="static"
-        sx={{ height: 300, backgroundColor: "#809072" }}
+        sx={{ height: 420, backgroundColor: "#809072" }}
       >
         <Toolbar
           sx={{
@@ -72,13 +72,19 @@ const PublicGuestPage = () => {
             height: "100%",
           }}
         >
-          <Typography
+          {/* <Typography
             variant="h3"
             align="center"
             sx={{ color: "#1d1f1b", width: "100%", fontFamily: "Aboreto" }}
           >
             Laura y Alonso
-          </Typography>
+          </Typography> */}
+          <img
+            alt="Imagen couple"
+            // src="/src/img/letras.png"
+            src="https://miboda-site.firebaseapp.com/letras.png"
+            style={{ width: "200px", height: "auto"}}
+          />
 
           <Typography
             variant="h7"
@@ -87,10 +93,25 @@ const PublicGuestPage = () => {
               color: "#1d1f1b",
               width: "50%",
               fontFamily: "Aboreto",
-              marginTop: "2rem",
+              fontStyle: "italic",
             }}
           >
-            Texto
+            "Y sobre todas estas cosas vestíos de amor, que es el vínculo
+            perfecto"
+          </Typography>
+
+          <Typography
+            variant="h3"
+            align="center"
+            sx={{
+              color: "#1d1f1b",
+              width: "50%",
+              fontFamily: "Herr Von Muellerhoff",
+              marginTop: "1rem",
+              fontStyle: "italic",
+            }}
+          >
+            Colosenses 3:14
           </Typography>
         </Toolbar>
       </AppBar>
@@ -198,8 +219,8 @@ const PublicGuestPage = () => {
       >
         <img
           alt="Imagen couple"
-          // src="/src/img/lau.jpeg"
-          src="https://miboda-site.firebaseapp.com/lau.jpeg"
+          // src="/src/img/lau1.png"
+          src="https://miboda-site.firebaseapp.com/lau1.png"
           style={{ maxWidth: "100%", height: "auto", margin: "2rem" }}
         />
 

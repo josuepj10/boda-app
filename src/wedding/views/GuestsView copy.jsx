@@ -21,6 +21,16 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
+
+import {
+  DataGrid,
+  GridToolbar,
+  GridToolbarContainer,
+  GridToolbarExport,
+  GridToolbarFilterButton,
+  GridToolbarColumnsButton,
+} from "@mui/x-data-grid";
+
 import { useEffect, useState } from "react";
 import { FirebaseDB } from "../../firebase/config";
 import {
@@ -157,6 +167,21 @@ export const GuestsView = () => {
     getGuests();
   }, [searchTerm]);
 
+  // Componente de barra de herramientas personalizada para el DataGrid
+  const CustomToolbar = () => (
+    <GridToolbarContainer>
+      <GridToolbarColumnsButton />
+      <GridToolbarFilterButton />
+      <GridToolbarExport />
+      <TextField
+        label="Buscar"
+        value={searchTerm}
+        onChange={handleSearch}
+        sx={{ marginLeft: "auto", marginRight: "16px" }}
+      />
+    </GridToolbarContainer>
+  );
+
   return (
     <>
       <Typography variant="h4" sx={{ margin: "16px" }} align="center">
@@ -166,57 +191,66 @@ export const GuestsView = () => {
         Cantidad de Invitados: {guestCount}
       </Typography>
 
-      <Box align="right">
+      {/* <Box align="right">
         <TextField
           label="Buscar"
           value={searchTerm}
           onChange={handleSearch}
           sx={{ margin: "16px" }}
         />
-      </Box>
+      </Box> */}
 
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell align="center">Nombre</TableCell>
-              <TableCell align="center">Apellido</TableCell>
-              <TableCell align="center">Asistencia</TableCell>
-              <TableCell align="center">Número de compañantes</TableCell>
-              <TableCell align="center">Acciones</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {guests.map((guest) => (
-              <TableRow
-                key={guest.id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell align="center">{guest.guest_name}</TableCell>
-                <TableCell align="center">{guest.guest_last_name}</TableCell>
-                <TableCell align="center">{guest.attend}</TableCell>
-                <TableCell align="center">{guest.attendants_number}</TableCell>
-                <TableCell align="center">
-                  <Button onClick={() => openEditModal(guest)}>
+      {/* Reemplazar la tabla manual con el DataGrid */}
+      <div style={{ height: 400, width: "100%" }}>
+        <DataGrid
+          rows={guests}
+          columns={[
+            { field: "guest_name", headerName: "Nombre", flex: 1 },
+            { field: "guest_last_name", headerName: "Apellido", flex: 1 },
+            { field: "attend", headerName: "Asistencia", flex: 1 },
+            {
+              field: "attendants_number",
+              headerName: "Número de acompañantes",
+              flex: 1,
+            },
+            {
+              field: "actions",
+              headerName: "Acciones",
+              flex: 1,
+              renderCell: (params) => (
+                <>
+                  <Button onClick={() => openEditModal(params.row)}>
                     <EditIcon />
                   </Button>
-                  <Button onClick={() => openDeleteModal(guest)}>
+                  <Button onClick={() => openDeleteModal(params.row)}>
                     <DeleteIcon />
                   </Button>
                   <a
-                    href={`/public/${guest.guest_name}/${guest.guest_last_name}/${guest.id}/${guest.attendants_number}`}
+                    href={`/public/${params.row.guest_name}/${params.row.guest_last_name}/${params.row.id}`}
                     target="_blank"
                   >
                     <Button color="primary">
                       <OpenInNewIcon />
                     </Button>
                   </a>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                </>
+              ),
+            },
+          ]}
+          components={{
+            Toolbar: CustomToolbar,
+          }}
+          filterModel={{
+            items: [
+              {
+                columnField: "guest_name",
+                operatorValue: "contains",
+                value: searchTerm,
+              },
+            ],
+          }}
+        />
+      </div>
 
       {/* Rest of the code, such as modals and buttons, remains the same */}
 

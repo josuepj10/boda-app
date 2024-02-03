@@ -2,10 +2,22 @@ import { useEffect, useState } from "react";
 import { doc, getDoc, updateDoc } from "firebase/firestore/lite";
 import { FirebaseDB } from "../../firebase/config";
 import { useParams } from "react-router-dom";
-import { Select, MenuItem, Typography, Box, Button, Dialog, DialogTitle, DialogContent, DialogActions, Divider, Grid } from "@mui/material";
+import {
+  Select,
+  MenuItem,
+  Typography,
+  Box,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Divider,
+  Grid,
+} from "@mui/material";
 
 const PublicGuestPage = () => {
-  const { guestName, guestLastName, userId } = useParams();
+  const { guestName, guestLastName, userId, attendants_number } = useParams();
   const [attend, setAttend] = useState("");
   const [attendanceOptions, setAttendanceOptions] = useState([
     "Asiste",
@@ -61,9 +73,8 @@ const PublicGuestPage = () => {
         await updateDoc(guestDocRef, {
           attend: "Asiste",
         });
-
         // Actualiza el estado después de confirmar la asistencia
-      setAttend("Asiste");
+        setAttend("Asiste");
 
         setIsDialogOpen(true);
       }
@@ -87,55 +98,86 @@ const PublicGuestPage = () => {
         alignItems="center"
         minHeight="100vh"
       >
-        <Typography variant="h5" sx={{ marginTop: "3rem", fontFamily: "Aboreto" }}>
+        <Typography
+          variant="h2"
+          sx={{ marginTop: "3rem", fontFamily: "Herr Von Muellerhoff" }}
+        >
           {guestName} {guestLastName}
         </Typography>
 
         <Typography align="center" sx={{ fontFamily: "Aboreto" }}>
-          HEMOS RESERVADO UN ESPACIO
+          {attendants_number == 0
+            ? "HEMOS RESERVADO UN ESPACIO PARA TI"
+            : attendants_number == 1
+            ? "HEMOS RESERVADO UN ESPACIO PARA TI Y UN ACOMPAÑANTE"
+            : `HEMOS RESERVADO UN ESPACIO PARA TI Y ${attendants_number} ACOMPAÑANTES`}
         </Typography>
 
-        <Grid sx={{ borderRight: '2px solid #ccc', height: '50px', margin: '0.5rem' }} />
+        <Grid
+          sx={{
+            borderRight: "2px solid #ccc",
+            height: "50px",
+            margin: "0.5rem",
+          }}
+        />
 
-        <Typography align="center" sx={{ fontFamily: "Aboreto", fontWeight: 'bold' }}>
+        <Typography
+          align="center"
+          sx={{ fontFamily: "Aboreto", fontWeight: "bold" }}
+        >
           CONFIRMA TU ASISTENCIA
         </Typography>
 
-        <Typography align="center" sx={{ fontFamily: "Aboreto", fontSize: '0.9rem', marginBottom: '1rem' }}>
-         ANTES DEL 10 DE FEBRERO, PRESIONANDO EL SIGUIENTE BOTÓN:
+        <Typography
+          align="center"
+          sx={{
+            fontFamily: "Aboreto",
+            fontSize: "0.9rem"
+          }}
+        >
+          ANTES DEL 10 DE FEBRERO, PRESIONANDO EL SIGUIENTE BOTÓN:
         </Typography>
 
         {isVisible && (
-        <Select
-          value={attend}
-          onChange={handleAttendChange}
-          sx={{ marginTop: "1rem", fontFamily: "Aboreto" }}
+          <Select
+            value={attend}
+            onChange={handleAttendChange}
+            sx={{ marginTop: "1rem", fontFamily: "Aboreto" }}
+          >
+            {attendanceOptions.map((option) => (
+              <MenuItem
+                key={option}
+                value={option}
+                disabled={attend === "Asiste"}
+              >
+                {option}
+              </MenuItem>
+            ))}
+          </Select>
+        )}
+        <Button
+          variant="contained"
+          onClick={handleUpdateAttend}
+          sx={{
+            marginTop: "1rem",
+            fontFamily: "Aboreto",
+            backgroundColor: "#809072",
+            ":hover": { backgroundColor: "#718065" },
+          }}
         >
-          {attendanceOptions.map((option) => (
-            <MenuItem key={option} value={option} disabled={attend === "Asiste"}>
-              {option}
-            </MenuItem>
-          ))}
-        </Select>
-      )} 
-      <Button
-        variant="contained"
-        onClick={handleUpdateAttend}
-        sx={{
-          marginTop: "1rem",
-          fontFamily: "Aboreto",
-          backgroundColor: "#809072",
-          ":hover": { backgroundColor: "#718065" },
-        }}
-      >
-        {attend === "Asiste" ? "Haz confirmado tu asistencia" : "Confirmar Asistencia"}
-      </Button>
+          {attend === "Asiste"
+            ? "Haz confirmado tu asistencia"
+            : "Confirmar Asistencia"}
+        </Button>
 
         {/* Diálogo para mostrar el mensaje de confirmación */}
         <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
           <DialogTitle>Confirmación de Asistencia</DialogTitle>
           <DialogContent>
-            <Typography>¡Gracias {guestName} por confirmar tu asistencia a la boda! Estamos emocionados de celebrar este día especial contigo.</Typography>
+            <Typography>
+              ¡Gracias {guestName} por confirmar tu asistencia a la boda!
+              Estamos emocionados de celebrar este día especial contigo.
+            </Typography>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCloseDialog}>Cerrar</Button>
@@ -143,7 +185,13 @@ const PublicGuestPage = () => {
         </Dialog>
 
         <Divider orientation="vertical" flexItem sx={{ mx: 2 }} />
-  
+
+        <img
+          alt="Imagen"
+          // src="/src/img/informacion.png"
+          src="https://react-cursos-ca49f.web.app/informacion.png"
+          style={{ maxWidth: "100%", height: "auto", marginTop: "2rem" }}
+        />
       </Box>
     </Box>
   );

@@ -24,7 +24,7 @@ export const AppRouter = () => {
 
        {/* Ruta para notas públicas */}
        {/* <Route path="/public/:guestName/:guestLastName" element={<PublicGuestPage />} /> */}
-       <Route path="/public/:guestName/:guestLastName/:userId"element={<PublicGuestPage />} />
+       <Route path="/public/:guestName/:guestLastName/:userId/:attendants_number"element={<PublicGuestPage />} />
 
       <Route path="/*" element={ <Navigate to= '/auth/login' />} /> 
       
