@@ -75,7 +75,7 @@ export const GuestsView = () => {
     // Filtrar resultados según el término de búsqueda
     const filteredGuests = guestList.filter((guest) => {
       const fullName =
-        `${guest.guest_name} ${guest.guest_last_name}`.toLowerCase();
+        `${guest.guest_name} ${guest.guest_last_name} ${guest.attend}}`.toLowerCase();
       return fullName.includes(searchTerm.toLowerCase());
     });
 
@@ -128,6 +128,7 @@ export const GuestsView = () => {
   };
 
   // 9- Función para crear un nuevo invitado
+  
   const createGuest = async () => {
     const newGuest = {
       guest_name: newGuestName,
@@ -139,8 +140,17 @@ export const GuestsView = () => {
     await addDoc(guestsCollection, newGuest);
 
     setCreateModalOpen(false);
-    getGuests();
+     ClearInputs();
+     getGuests();
   };
+
+  // Cleans Inputs of the modal
+  const ClearInputs = () => {
+    setNewGuestName(" ");
+    setNewGuestLastName(" ");
+    setNewGuestAttendantsNumber(" ");
+    setAttendance(" ");
+  }
 
   // 10- Uso de useEffect para cargar invitados al montar el componente
   useEffect(() => {
