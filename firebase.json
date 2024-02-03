@@ -1,6 +1,5 @@
 {
   "hosting": {
-    "site": "miboda-site",
     "public": "dist",
     "ignore": [
       "firebase.json",
