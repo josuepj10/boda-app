@@ -28,40 +28,31 @@ const PublicGuestPage = () => {
     seconds: 0,
   });
 
-  useEffect(() => {
-    const targetDate = new Date("2024-03-23");
-
-    const updateCountdown = () => {
-      const currentDate = new Date();
-      const timeRemaining = targetDate - currentDate;
-
-      const months = Math.floor(timeRemaining / (1000 * 60 * 60 * 24 * 30.44)); // Average month length
-      const days = Math.floor(
-        (timeRemaining % (1000 * 60 * 60 * 24 * 30.44)) / (1000 * 60 * 60 * 24)
-      );
-      const hours = Math.floor(
-        (timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-      );
-      const minutes = Math.floor(
-        (timeRemaining % (1000 * 60 * 60)) / (1000 * 60)
-      );
-      const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
-
-      setCountdown({ months, days, hours, minutes, seconds });
-    };
-
-    const countdownInterval = setInterval(updateCountdown, 1000);
-
-    // Limpia el intervalo cuando el componente se desmonta
-    return () => clearInterval(countdownInterval);
-  }, []);
-
   return (
-    <Box sx={{ backgroundColor: "#fdf4ef" }}>
+    <Box sx={{ backgroundColor: "#fdf4ef" ,  display: "flex",
+    justifyContent: "center",
+    flexDirection: "column",
+    alignItems: "center", }}>
       <CssBaseline />
       <AppBar
         position="static"
-        sx={{ height: 420, backgroundColor: "#809072" }}
+        sx={{
+          // height: 420,
+          // backgroundColor: "#809072"
+          // height: "auto",  // Set the desired height
+          // maxWidth: 683,
+          backgroundImage: 'url("https://boda-app-2.web.app/sombrero1.png")',
+          // backgroundImage: 'url("/src/img/sombrero1.png")',
+          backgroundColor: "#fdf4ef",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "100% 100%", 
+          boxShadow: "none",
+          height: 700, // Altura predeterminada para dispositivos que no sean móviles
+          maxWidth: 683,
+          "@media (max-width: 500px)": { // Media query para dispositivos móviles
+            height: 500, // Cambiar la altura a 'auto' para dispositivos móviles para que se ajuste según el contenido
+          },
+        }}
       >
         <Toolbar
           sx={{
@@ -82,8 +73,8 @@ const PublicGuestPage = () => {
           <img
             alt="Imagen couple"
             // src="/src/img/letras.png"
-            src="https://miboda-site.firebaseapp.com/letras.png"
-            style={{ width: "200px", height: "auto"}}
+            src="https://boda-app-2.web.app/letras.png"
+            style={{ width: "200px", height: "auto" }}
           />
 
           <Typography
@@ -91,9 +82,13 @@ const PublicGuestPage = () => {
             align="center"
             sx={{
               color: "#1d1f1b",
-              width: "50%",
+              // color: "#fdf4ef",
+              width: "75%",
               fontFamily: "Aboreto",
               fontStyle: "italic",
+              fontWeight: "bold",
+              textShadow: "2px 2px 4px #fdf4ef",   
+              marginTop: "1rem",        
             }}
           >
             "Y sobre todas estas cosas vestíos de amor, que es el vínculo
@@ -105,10 +100,12 @@ const PublicGuestPage = () => {
             align="center"
             sx={{
               color: "#1d1f1b",
+              // color: "#fdf4ef",
               width: "50%",
               fontFamily: "Herr Von Muellerhoff",
-              marginTop: "1rem",
               fontStyle: "italic",
+              textShadow: "2px 2px 4px #fdf4ef",
+              marginTop: "3rem",
             }}
           >
             Colosenses 3:14
@@ -149,7 +146,7 @@ const PublicGuestPage = () => {
 
         <img
           alt="Imagen"
-          src="https://miboda-site.firebaseapp.com/floresNombres.png"
+          src="https://boda-app-2.web.app/floresNombres.png"
           // src="/src/img/floresNombres.png"
           style={{ maxWidth: "100%", height: "auto" }}
         />
@@ -170,7 +167,7 @@ const PublicGuestPage = () => {
         </Typography>
 
         <Typography align="center" variant="h7" sx={{ marginTop: "3rem" }}>
-          A LA 2:00 DE LA TARDE EN LA IGLESIA DE ZARAGOZA, PALMARES
+          A LAS 2:00 DE LA TARDE EN LA IGLESIA DE ZARAGOZA, PALMARES
         </Typography>
 
         <Button
@@ -220,7 +217,7 @@ const PublicGuestPage = () => {
         <img
           alt="Imagen couple"
           // src="/src/img/lau1.png"
-          src="https://miboda-site.firebaseapp.com/lau1.png"
+          src="https://boda-app-2.web.app/lau1.png"
           style={{ maxWidth: "100%", height: "auto", margin: "2rem" }}
         />
 
@@ -229,7 +226,6 @@ const PublicGuestPage = () => {
           guestLastName={guestLastName}
           userId={userId}
         />
-      
       </Box>
     </Box>
   );
