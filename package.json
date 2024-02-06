@@ -17,6 +17,7 @@
     "@mui/material": "^5.14.9",
     "@mui/x-data-grid": "^6.19.1",
     "@reduxjs/toolkit": "^1.9.5",
+    "clipboard-copy": "^4.0.1",
     "firebase": "^10.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

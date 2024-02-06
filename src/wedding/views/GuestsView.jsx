@@ -32,11 +32,13 @@ import {
   addDoc,
 } from "firebase/firestore/lite";
 import { Link } from "react-router-dom";
-import { ArrowForward, AddOutlined } from "@mui/icons-material";
+import { ArrowForward, AddOutlined, ContentCopy } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import EditUser from "../pages/EditUser";
+import clipboardCopy from "clipboard-copy";
 
 export const GuestsView = () => {
   // 1- Configurar hooks
@@ -128,7 +130,7 @@ export const GuestsView = () => {
   };
 
   // 9- Función para crear un nuevo invitado
-  
+
   const createGuest = async () => {
     const newGuest = {
       guest_name: newGuestName,
@@ -140,17 +142,17 @@ export const GuestsView = () => {
     await addDoc(guestsCollection, newGuest);
 
     setCreateModalOpen(false);
-     ClearInputs();
-     getGuests();
+    ClearInputs();
+    getGuests();
   };
 
   // Cleans Inputs of the modal
   const ClearInputs = () => {
-    setNewGuestName(" ");
-    setNewGuestLastName(" ");
-    setNewGuestAttendantsNumber(" ");
-    setAttendance(" ");
-  }
+    setNewGuestName("");
+    setNewGuestLastName("");
+    setNewGuestAttendantsNumber("");
+    setAttendance("");
+  };
 
   // 10- Uso de useEffect para cargar invitados al montar el componente
   useEffect(() => {
@@ -166,6 +168,13 @@ export const GuestsView = () => {
   useEffect(() => {
     getGuests();
   }, [searchTerm]);
+
+  //11-Función para copiar el enlace del invitado al portapapeles
+  const copyLink = (guest) => {
+    const link = `https://boda-app-2.web.app/public/${guest.guest_name}/${guest.guest_last_name}/${guest.id}/${guest.attendants_number}`;
+    clipboardCopy(link);
+    alert("Enlace copiado al portapapeles");
+  };
 
   return (
     <>
@@ -207,13 +216,13 @@ export const GuestsView = () => {
                 <TableCell align="center">{guest.attend}</TableCell>
                 <TableCell align="center">{guest.attendants_number}</TableCell>
                 <TableCell align="center">
-                  <Button onClick={() => openEditModal(guest)}>
+                  <Button sx={{ p: 0 }} onClick={() => openEditModal(guest)}>
                     <EditIcon />
                   </Button>
-                  <Button onClick={() => openDeleteModal(guest)}>
+                  <Button sx={{ p: 0 }} onClick={() => openDeleteModal(guest)}>
                     <DeleteIcon />
                   </Button>
-                  <a
+                  <a sx={{ p: 0 }}
                     href={`/public/${guest.guest_name}/${guest.guest_last_name}/${guest.id}/${guest.attendants_number}`}
                     target="_blank"
                   >
@@ -221,6 +230,9 @@ export const GuestsView = () => {
                       <OpenInNewIcon />
                     </Button>
                   </a>
+                  <Button sx={{ p: 0 }} onClick={() => copyLink(guest)}>
+                    <ContentCopyIcon />
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

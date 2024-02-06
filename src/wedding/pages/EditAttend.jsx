@@ -135,7 +135,7 @@ const PublicGuestPage = () => {
             fontSize: "0.9rem"
           }}
         >
-          ANTES DEL 10 DE FEBRERO, PRESIONANDO EL SIGUIENTE BOTÓN:
+          ANTES DEL 20 DE FEBRERO, PRESIONANDO EL SIGUIENTE BOTÓN:
         </Typography>
 
         {isVisible && (
@@ -160,6 +160,7 @@ const PublicGuestPage = () => {
           onClick={handleUpdateAttend}
           sx={{
             marginTop: "1rem",
+            marginBottom: "4rem",
             fontFamily: "Aboreto",
             backgroundColor: "#809072",
             ":hover": { backgroundColor: "#718065" },
@@ -189,9 +190,10 @@ const PublicGuestPage = () => {
         <img
           alt="Imagen"
           // src="/src/img/informacion.png"
-          src="https://react-cursos-ca49f.web.app/informacion.png"
+          src="https://boda-app-2.web.app/informacion.png"
           style={{ maxWidth: "100%", height: "auto", marginTop: "2rem" }}
         />
+        
       </Box>
     </Box>
   );
