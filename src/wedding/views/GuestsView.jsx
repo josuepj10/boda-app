@@ -36,7 +36,7 @@ import { ArrowForward, AddOutlined, ContentCopy } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import EditUser from "../pages/EditUser";
 import clipboardCopy from "clipboard-copy";
 
@@ -59,7 +59,7 @@ export const GuestsView = () => {
 
   const [attendance, setAttendance] = useState("A la espera"); // Valor por defecto "Asiste"
   const attendanceOptions = ["Asiste", "No asiste", "A la espera"];
-  const [guestCount, setGuestCount] = useState(0);
+  // const [guestCount, setGuestCount] = useState(0);
 
   // 2- Referencia a DB
   const guestsCollection = collection(
@@ -71,18 +71,40 @@ export const GuestsView = () => {
 
   // 3- Función para mostrar todos los documentos
   const getGuests = async () => {
+    // Obtener todos los documentos de una sola vez
     const data = await getDocs(guestsCollection);
     const guestList = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
 
-    // Filtrar resultados según el término de búsqueda
-    const filteredGuests = guestList.filter((guest) => {
+    // Filtrar resultados según el término de búsqueda y contar los usuarios en cada categoría
+    const filteredGuests = [];
+    let total = 0;
+    let asisteCount = 0;
+    let noAsisteCount = 0;
+    let aLaEsperaCount = 0;
+
+    guestList.forEach((guest) => {
       const fullName =
-        `${guest.guest_name} ${guest.guest_last_name} ${guest.attend}}`.toLowerCase();
-      return fullName.includes(searchTerm.toLowerCase());
+        `${guest.guest_name} ${guest.guest_last_name} ${guest.attend}`.toLowerCase();
+
+      // Filtrar por término de búsqueda
+      if (fullName.includes(searchTerm.toLowerCase())) {
+        filteredGuests.push(guest);
+
+        // Contar los usuarios por categorías
+        total += 1;
+        if (guest.attend === "Asiste") asisteCount += 1;
+        if (guest.attend === "No asiste") noAsisteCount += 1;
+        if (guest.attend === "A la espera") aLaEsperaCount += 1;
+      }
     });
 
-    setGuests(filteredGuests);
-    setGuestCount(filteredGuests.length);
+    setGuests(filteredGuests); // Actualizar la lista filtrada de invitados
+    setUserCounts({
+      total,
+      asiste: asisteCount,
+      noAsiste: noAsisteCount,
+      aLaEspera: aLaEsperaCount,
+    });
   };
 
   // 4- Función para abrir el modal de edición
@@ -176,13 +198,38 @@ export const GuestsView = () => {
     alert("Enlace copiado al portapapeles");
   };
 
+  //12- Contadores
+  const [userCounts, setUserCounts] = useState({
+    total: 0,
+    asiste: 0,
+    noAsiste: 0,
+    aLaEspera: 0,
+  });
+
   return (
     <>
       <Typography variant="h4" sx={{ margin: "16px" }} align="center">
         Lista de Invitados
       </Typography>
-      <Typography sx={{ margin: "3rem" }} variant="h6" align="center">
+      {/* <Typography sx={{ margin: "3rem" }} variant="h6" align="center">
         Cantidad de Invitados: {guestCount}
+      </Typography> */}
+
+      <Typography  align="center">
+        <Box>
+          <Typography >
+            Total de invitados: <strong>{userCounts.total}</strong>
+          </Typography>
+          <Typography>
+            Invitados confirmados: <strong>{userCounts.asiste}</strong>
+          </Typography>
+          <Typography>
+            Invitados que no asisten: <strong>{userCounts.noAsiste}</strong>
+          </Typography>
+          <Typography>
+            Invitados a la espera: <strong>{userCounts.aLaEspera}</strong>
+          </Typography>
+        </Box>
       </Typography>
 
       <Box align="right">
@@ -201,7 +248,7 @@ export const GuestsView = () => {
               <TableCell align="center">Nombre</TableCell>
               <TableCell align="center">Apellido</TableCell>
               <TableCell align="center">Asistencia</TableCell>
-              <TableCell align="center">Número de compañantes</TableCell>
+              <TableCell align="center">Número de acompañantes</TableCell>
               <TableCell align="center">Acciones</TableCell>
             </TableRow>
           </TableHead>
@@ -222,7 +269,8 @@ export const GuestsView = () => {
                   <Button sx={{ p: 0 }} onClick={() => openDeleteModal(guest)}>
                     <DeleteIcon />
                   </Button>
-                  <a sx={{ p: 0 }}
+                  <a
+                    sx={{ p: 0 }}
                     href={`/public/${guest.guest_name}/${guest.guest_last_name}/${guest.id}/${guest.attendants_number}`}
                     target="_blank"
                   >
